@@ -73,7 +73,9 @@ func (l *Logger) Consumer() {
 		select {
 		// log消息列表
 		case log := <-news:
+			//go func() {
 			l.BackEnd.Do(log)
+			//}()
 
 		// 错误消息列表
 		case e := <-err:
@@ -96,22 +98,20 @@ func (l *Logger) Consumer() {
 
 		// 服务变更通道
 		case _ = <-choise:
-			if len(choise) == 0 {
-				ok := l.BackEnd.Check()
-				if ok {
-					l.Run = 1
-					l.ErrNum = 0
-				} else {
-					l.Run = 0
-				}
-				// 低优先和当前服务不可用时
-				if !ok || l.CurrConf.Spare == true {
-					// 检查高优先服务的可用性
-					l.Choice(false)
-					if l.Run == 0 && !ok {
-						//暂时低优先服务
-						l.Choice(true)
-					}
+			ok := l.BackEnd.Check()
+			if ok {
+				l.Run = 1
+				l.ErrNum = 0
+			} else {
+				l.Run = 0
+			}
+			// 低优先和当前服务不可用时
+			if !ok || l.CurrConf.Spare == true {
+				// 检查高优先服务的可用性
+				l.Choice(false)
+				if l.Run == 0 && !ok {
+					//暂时低优先服务
+					l.Choice(true)
 				}
 			}
 
@@ -127,6 +127,14 @@ func (l *Logger) Consumer() {
 func (l *Logger) Choice(spare bool) {
 	var err error
 	for i := 0; i < len(l.Conf); i++ {
+
+		if l.Conf[i].Addr == l.CurrConf.Addr &&
+			l.Conf[i].Area == l.CurrConf.Area &&
+			l.Conf[i].Spare == l.CurrConf.Spare &&
+			l.Conf[i].Auth_id == l.CurrConf.Auth_id &&
+			l.Conf[i].Auth_Secret == l.CurrConf.Auth_Secret {
+			continue
+		}
 
 		// 主日志服务
 		if !spare && l.Conf[i].Spare {
@@ -167,7 +175,12 @@ func (l *Logger) Choice(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				fmt.Println("\033[31;1mPanic：文件日志无法使用")
+				file_local_log.Do(&log_err{
+					Level: "ERROR",
+					Err:   err.Error(),
+					Msg:   "文件日志" + l.Conf[i].Addr + "无法使用",
+					Time:  time.Now().Unix(),
+				})
 			}
 			break
 		default:
@@ -188,10 +201,6 @@ func (l *Logger) Choice(spare bool) {
 					l.ChoiceChannel <- true
 				}()
 			} else {
-				go func() {
-					time.Sleep(60 * time.Second)
-					l.ChoiceChannel <- true
-				}()
 				fmt.Println("\033[32;1m日志服务正常启动")
 			}
 			break
@@ -204,9 +213,7 @@ func (l *Logger) Debug(obj ...LogBase) {
 	if l.Level >= DebugLevel {
 		for _, v := range obj {
 			v.SetLevel("DEBUG")
-			go func() {
-				l.NewsChannel <- v
-			}()
+			l.NewsChannel <- v
 		}
 	}
 }
@@ -216,9 +223,7 @@ func (l *Logger) Info(obj ...LogBase) {
 	if l.Level >= InfoLevel {
 		for _, v := range obj {
 			v.SetLevel("INFO")
-			go func() {
-				l.BackEnd.Do(v)
-			}()
+			l.NewsChannel <- v
 		}
 	}
 }
@@ -228,9 +233,7 @@ func (l *Logger) Print(obj ...LogBase) {
 	if l.Level >= InfoLevel {
 		for _, v := range obj {
 			v.SetLevel("PRINT")
-			go func() {
-				l.BackEnd.Do(v)
-			}()
+			l.NewsChannel <- v
 		}
 	}
 }
@@ -240,9 +243,7 @@ func (l *Logger) Warn(obj ...LogBase) {
 	if l.Level >= WarnLevel {
 		for _, v := range obj {
 			v.SetLevel("WARN")
-			go func() {
-				l.BackEnd.Do(v)
-			}()
+			l.NewsChannel <- v
 		}
 	}
 }
@@ -252,9 +253,7 @@ func (l *Logger) Error(obj ...LogBase) {
 	if l.Level >= ErrorLevel {
 		for _, v := range obj {
 			v.SetLevel("ERROR")
-			go func() {
-				l.BackEnd.Do(v)
-			}()
+			l.NewsChannel <- v
 		}
 	}
 }
@@ -264,21 +263,7 @@ func (l *Logger) Fatal(obj ...LogBase) {
 	if l.Level >= FatalLevel {
 		for _, v := range obj {
 			v.SetLevel("FATAL")
-			go func() {
-				l.BackEnd.Do(v)
-			}()
+			l.NewsChannel <- v
 		}
 	}
 }
-
-/*func (l *Logger) Get() {
-
-}
-
-func (l *Logger) List() {
-
-}
-
-func (l *Logger) Put(i int64) {
-
-}*/

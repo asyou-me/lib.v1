@@ -109,6 +109,9 @@ func (r *FileHandle) Check() bool {
 
 // 文档日志处理句柄
 func (l *FileHandle) Do(msg LogBase) {
+	if l.log.PrintKey {
+		fmt.Println(msg)
+	}
 	var NowTime = time.Now().Unix()
 	// 自动分片日志
 	if NowTime-l.NowDayTime > 86400 {
@@ -119,7 +122,8 @@ func (l *FileHandle) Do(msg LogBase) {
 	}
 
 	msg.SetTime(NowTime)
-	reader := bytes.NewBuffer(append(jsonFormat(msg), '\n'))
+	msgbyte := append(jsonFormat(msg), '\n')
+	reader := bytes.NewBuffer(msgbyte)
 
 	// 多线程写锁定
 	l.mu.Lock()
@@ -127,6 +131,8 @@ func (l *FileHandle) Do(msg LogBase) {
 	l.num = l.num + 1
 	l.mu.Unlock()
 
+	reader = nil
+	msgbyte = nil
 	if err != nil {
 
 		// 多线程写锁定
@@ -138,7 +144,9 @@ func (l *FileHandle) Do(msg LogBase) {
 			l.log.NewsChannel <- msg
 			l.log.Err <- err
 		}()
+		return
 	}
+	msg = nil
 }
 
 // 文档日志处理句柄
@@ -160,5 +168,7 @@ func (l *FileHandle) Recovery(msg string) {
 			l.log.RecoveryChannel <- msg
 			l.log.Err <- err
 		}()
+		return
 	}
+	msg = ""
 }

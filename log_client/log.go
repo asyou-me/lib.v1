@@ -6,11 +6,8 @@ import (
 )
 
 var (
-	ReconnectInterval   = 5
-	RedisConnectTimeout = 2000000000
-	RedisReadTimeout    = 1000000000
-	RediswriteTimeout   = 1000000000
-	FileTimeFormat      = "2006-01-02"
+	ReconnectInterval = 5
+	FileTimeFormat    = "2006-01-02"
 )
 
 /*
@@ -33,10 +30,10 @@ func init() {
 
 func SetLogLog(conf LogConf) {
 	var err error
-	file_local_log, err = NewFileHandle(conf, nil)
+	file_local_log, err = NewFileHandle(conf, &Logger{})
 	if err != nil {
-		fmt.Println("\033[31;1mPanic：文件日志无法使用")
 		fmt.Println(err)
+		fmt.Println("\033[31;1mPanic：文件日志无法使用")
 		os.Exit(2)
 	}
 }

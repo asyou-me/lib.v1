@@ -2,13 +2,14 @@ package log
 
 import (
 	"fmt"
+	"github.com/asyoume/lib/redis"
 	"sync"
 	"time"
 )
 
 // 创建redis处理对象
 func NewRedisHandle(conf LogConf, log *Logger) (*RedisHandle, error) {
-	c, err := NewRedisPool(conf.Addr, 20)
+	c, err := redis.NewPool(conf.Addr, 20)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +23,7 @@ func NewRedisHandle(conf LogConf, log *Logger) (*RedisHandle, error) {
 
 // redis处理对象
 type RedisHandle struct {
-	Client *redisPool
+	Client *redis.Pool
 	Area   string
 	log    *Logger
 	errNum int64
@@ -54,6 +55,12 @@ func (r *RedisHandle) Check() bool {
 
 // redis处理句柄
 func (r *RedisHandle) Do(msg LogBase) {
+	NowTime := time.Now().Unix()
+	msg.SetTime(NowTime)
+
+	if r.log.PrintKey {
+		fmt.Println(msg)
+	}
 	reader := jsonFormat(msg)
 	_, err := r.Client.Do("LPUSH", r.Area, string(reader))
 	r.mu.Lock()
@@ -67,7 +74,10 @@ func (r *RedisHandle) Do(msg LogBase) {
 			r.log.NewsChannel <- msg
 			r.log.Err <- err
 		}()
+		return
 	}
+	reader = nil
+	msg = nil
 }
 
 // redis处理句柄
@@ -84,5 +94,7 @@ func (r *RedisHandle) Recovery(msg string) {
 			r.log.RecoveryChannel <- msg
 			r.log.Err <- err
 		}()
+		return
 	}
+	msg = ""
 }
