@@ -1,4 +1,4 @@
-package log
+package log_client
 
 /*
 var err error

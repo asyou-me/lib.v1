@@ -1,4 +1,4 @@
-package log
+package log_client
 
 type log_err struct {
 	Msg   string `json:"msg"`
