@@ -85,10 +85,10 @@ func (r *FileHandle) Cut(must bool) {
 }
 
 // 文档日志对象健康检查
-func (r *FileHandle) Check() bool {
+func (r *FileHandle) CheckHealth() bool {
 	_, err := file_path_check(r.Path + "/" + r.Area + "/log.json")
 	if err != nil {
-		file_local_log.Do(&log_err{
+		_base_log.WriteTo(&log_err{
 			Level: "ERROR",
 			Err:   err.Error(),
 			Msg: "检查日志文档" + r.Path + "/" + r.Area + ".log无法使用(" +
@@ -97,7 +97,7 @@ func (r *FileHandle) Check() bool {
 		})
 		return false
 	}
-	file_local_log.Do(&log_err{
+	_base_log.WriteTo(&log_err{
 		Level: "INFO",
 		Err:   "",
 		Msg: "检查日志文档" + r.Path + "/" + r.Area + ".log可以使用(" +
@@ -108,7 +108,7 @@ func (r *FileHandle) Check() bool {
 }
 
 // 文档日志处理句柄
-func (l *FileHandle) Do(msg LogBase) {
+func (l *FileHandle) WriteTo(msg LogBase) {
 	if l.log.PrintKey {
 		fmt.Println(msg)
 	}
@@ -150,7 +150,7 @@ func (l *FileHandle) Do(msg LogBase) {
 }
 
 // 文档日志处理句柄
-func (l *FileHandle) Recovery(msg string) {
+func (l *FileHandle) RecoveryTo(msg string) {
 	reader := bytes.NewBuffer(append([]byte(msg), '\n'))
 
 	// 多线程写锁定

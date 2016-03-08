@@ -7,9 +7,9 @@ import (
 )
 
 var (
-	RedisConnectTimeout = 2000000000
-	RedisReadTimeout    = 1000000000
-	RediswriteTimeout   = 1000000000
+	RedisConnectTimeout = 2000
+	RedisReadTimeout    = 1000
+	RediswriteTimeout   = 1000
 )
 
 // 新建一个新的redis链接池
@@ -19,10 +19,14 @@ func NewPool(addr string, max int64) (*Pool, error) {
 	pool.Address = addr
 	var i int64
 	var err error
+
 	for i = 0; i < max; i++ {
 		var conn redis.Conn
-		conn, err = redis.DialTimeout("tcp", addr, time.Duration(RedisConnectTimeout),
-			time.Duration(RedisReadTimeout), time.Duration(RediswriteTimeout))
+		conn, err = redis.DialTimeout("tcp", addr, time.Duration(RedisConnectTimeout*1000000),
+			time.Duration(RedisReadTimeout*1000000), time.Duration(RediswriteTimeout*1000000))
+		if err != nil {
+			return nil, err
+		}
 		pool.Put(conn)
 	}
 

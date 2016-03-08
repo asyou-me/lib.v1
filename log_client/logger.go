@@ -51,7 +51,7 @@ func (l *Logger) Init(conf *[]LogConf) error {
 	l.ChoiceChannel = make(chan bool, 1)
 
 	l.Level = DebugLevel
-	// 开启日志消费模式
+	// 选择一个可用的日志后端
 	l.Choice(false)
 	// 开启日志处理携程
 	go func() {
@@ -74,12 +74,12 @@ func (l *Logger) Consumer() {
 		// log消息列表
 		case log := <-news:
 			//go func() {
-			l.BackEnd.Do(log)
+			l.BackEnd.WriteTo(log)
 			//}()
 
 		// 错误消息列表
 		case e := <-err:
-			file_local_log.Do(&log_err{
+			_base_log.WriteTo(&log_err{
 				Level: "WARN",
 				Msg:   e.Error(),
 				Time:  time.Now().Unix(),
@@ -98,7 +98,7 @@ func (l *Logger) Consumer() {
 
 		// 服务变更通道
 		case _ = <-choise:
-			ok := l.BackEnd.Check()
+			ok := l.BackEnd.CheckHealth()
 			if ok {
 				l.Run = 1
 				l.ErrNum = 0
@@ -157,7 +157,7 @@ func (l *Logger) Choice(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				file_local_log.Do(&log_err{
+				_base_log.WriteTo(&log_err{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "初始化redis服务器" + l.Conf[i].Addr + "失败",
@@ -175,7 +175,7 @@ func (l *Logger) Choice(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				file_local_log.Do(&log_err{
+				_base_log.WriteTo(&log_err{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "文件日志" + l.Conf[i].Addr + "无法使用",
@@ -191,7 +191,7 @@ func (l *Logger) Choice(spare bool) {
 			if l.CurrConf.Spare == true {
 				fmt.Println("\033[31;1m日志进入低优先模式,系统会以", ReconnectInterval,
 					"秒为周期检查高权重服务的可用性")
-				file_local_log.Do(&log_err{
+				_base_log.WriteTo(&log_err{
 					Level: "INFO",
 					Msg:   "高权重服务不可用,日志进入备用模式",
 					Time:  time.Now().Unix(),

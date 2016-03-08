@@ -11,18 +11,15 @@ const (
 	DebugLevel
 )
 
-// 日志后端对象接口定义
-type LogInterface interface {
-	Do(LogBase)
-	Check() bool
-	Recovery(string)
-}
-
-// 日志初始化配置文件
+// 日志初始化配置文件数据类型
 type LogConf struct {
-	Addr        string `json:"addr"`
-	Area        string `json:"area"`
-	Auth_id     string `json:"auth_id"`
+	// mysql 链接参数  redis xxx.xxx.xxx.xxx:port  file /var/log/xxxx
+	Addr string `json:"addr"`
+	// mysql 表名    redis  list的key名   file 目录名
+	Area string `json:"area"`
+	// mysql 账户   redis auth_id
+	Auth_id string `json:"auth_id"`
+	// mysql 密码
 	Auth_Secret string `json:"auth_secret"`
 	Type        string `json:"type"`
 	Spare       bool   `json:"spare"`

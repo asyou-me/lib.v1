@@ -20,17 +20,17 @@ C P U:i5 6600
 使用redis后端  6w/s写入速度  内存占用170M  cpu 28%
 */
 
-var file_local_log *FileHandle
+var _base_log *FileHandle
 
 func init() {
 	// 默认自动初始化到当前目录
-	SetLogLog(LogConf{"./", "_log_log", "",
+	SetBaseLog(LogConf{"./", "_base_log", "",
 		"", "file", true, 1})
 }
 
-func SetLogLog(conf LogConf) {
+func SetBaseLog(conf LogConf) {
 	var err error
-	file_local_log, err = NewFileHandle(conf, &Logger{})
+	_base_log, err = NewFileHandle(conf, &Logger{})
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("\033[31;1mPanic：文件日志无法使用")
@@ -38,7 +38,7 @@ func SetLogLog(conf LogConf) {
 	}
 }
 
-//创建日志对象
+// 创建日志对象
 func New(conf *[]LogConf) (*Logger, error) {
 	l := &Logger{}
 	err := l.Init(conf)
@@ -46,4 +46,14 @@ func New(conf *[]LogConf) (*Logger, error) {
 		return nil, err
 	}
 	return l, nil
+}
+
+// 日志后端接口,所有日志的对象都需要实现这个接口
+type LogInterface interface {
+	// 将日志写入服务,写入的是一个对象
+	WriteTo(LogBase)
+	// 此方法用于检查日志服务的可用性
+	CheckHealth() bool
+	// 此方法用于将一条将被恢复的消息重新写入日志服务
+	RecoveryTo(string)
 }

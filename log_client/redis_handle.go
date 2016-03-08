@@ -33,10 +33,10 @@ type RedisHandle struct {
 }
 
 // redis服务健康检查
-func (r *RedisHandle) Check() bool {
+func (r *RedisHandle) CheckHealth() bool {
 	_, err := r.Client.Do("PING")
 	if err != nil {
-		file_local_log.Do(&log_err{
+		_base_log.WriteTo(&log_err{
 			Level: "ERROR",
 			Err:   err.Error(),
 			Msg:   "检查redis服务器" + r.Client.Address + ",服务无法使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
@@ -44,7 +44,7 @@ func (r *RedisHandle) Check() bool {
 		})
 		return false
 	}
-	file_local_log.Do(&log_err{
+	_base_log.WriteTo(&log_err{
 		Level: "INFO",
 		Err:   "",
 		Msg:   "检查redis服务器" + r.Client.Address + ",服务可以使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
@@ -54,7 +54,7 @@ func (r *RedisHandle) Check() bool {
 }
 
 // redis处理句柄
-func (r *RedisHandle) Do(msg LogBase) {
+func (r *RedisHandle) WriteTo(msg LogBase) {
 	NowTime := time.Now().Unix()
 	msg.SetTime(NowTime)
 
@@ -81,7 +81,7 @@ func (r *RedisHandle) Do(msg LogBase) {
 }
 
 // redis处理句柄
-func (r *RedisHandle) Recovery(msg string) {
+func (r *RedisHandle) RecoveryTo(msg string) {
 	_, err := r.Client.Do("LPUSH", r.Area, msg)
 	r.mu.Lock()
 	r.num = r.num + 1
