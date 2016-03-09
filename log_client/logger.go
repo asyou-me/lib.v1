@@ -17,8 +17,8 @@ type Logger struct {
 	BackEnd      LogInterface
 	BackEndTrash LogInterface
 	// 重启动相关
-	ChoiceChannel chan bool
-	lastChoice    int64
+	TransitionChannel chan bool
+	lastTransition    int64
 
 	//日志记录等级
 	Level Level
@@ -48,11 +48,11 @@ func (l *Logger) Init(conf *[]LogConf) error {
 	l.NewsChannel = make(chan LogBase, 1000)
 	l.StopChannel = make(chan bool)
 	l.Err = make(chan error, 100)
-	l.ChoiceChannel = make(chan bool, 1)
+	l.TransitionChannel = make(chan bool, 1)
 
 	l.Level = DebugLevel
 	// 选择一个可用的日志后端
-	l.Choice(false)
+	l.Transition(false)
 	// 开启日志处理携程
 	go func() {
 		l.Consumer()
@@ -68,7 +68,7 @@ func (l *Logger) Consumer() {
 	var news = l.NewsChannel
 	var err = l.Err
 	var stop = l.StopChannel
-	var choise = l.ChoiceChannel
+	var transition = l.TransitionChannel
 	for {
 		select {
 		// log消息列表
@@ -87,17 +87,17 @@ func (l *Logger) Consumer() {
 
 			l.ErrNum = l.ErrNum + 1
 			var now_unix_time = time.Now().Unix()
-			if l.ErrNum > 100 && now_unix_time-l.lastChoice > 5 {
-				l.lastChoice = now_unix_time
+			if l.ErrNum > 100 && now_unix_time-l.lastTransition > 5 {
+				l.lastTransition = now_unix_time
 				go func() {
-					if len(choise) == 0 {
-						choise <- true
+					if len(transition) == 0 {
+						transition <- true
 					}
 				}()
 			}
 
 		// 服务变更通道
-		case _ = <-choise:
+		case _ = <-transition:
 			ok := l.BackEnd.CheckHealth()
 			if ok {
 				l.Run = 1
@@ -108,13 +108,13 @@ func (l *Logger) Consumer() {
 			// 低优先和当前服务不可用时
 			if !ok || l.CurrConf.Spare == true {
 				// 检查高优先服务的可用性
-				l.Choice(false)
+				l.Transition(false)
 				if l.Run == 0 && !ok {
 					//暂时低优先服务
-					l.Choice(true)
+					l.Transition(true)
 				}
 			}
-
+			
 		case s := <-stop:
 			if s == true {
 				break
@@ -124,7 +124,7 @@ func (l *Logger) Consumer() {
 }
 
 //选择最优的日志远端
-func (l *Logger) Choice(spare bool) {
+func (l *Logger) Transition(spare bool) {
 	var err error
 	for i := 0; i < len(l.Conf); i++ {
 
@@ -198,7 +198,7 @@ func (l *Logger) Choice(spare bool) {
 				})
 				go func() {
 					time.Sleep(time.Duration(ReconnectInterval) * time.Second)
-					l.ChoiceChannel <- true
+					l.TransitionChannel <- true
 				}()
 			} else {
 				fmt.Println("\033[32;1m日志服务正常启动")

@@ -1,2 +1,3 @@
 {"msg":"初始化redis服务器127.0.0.1:6379失败","err":"dial tcp 127.0.0.1:6379: getsockopt: connection refused","level":"ERROR","time":1457401085}
 {"msg":"初始化redis服务器127.0.0.1:6379失败","err":"dial tcp 127.0.0.1:6379: getsockopt: connection refused","level":"ERROR","time":1457417580}
+{"msg":"初始化redis服务器127.0.0.1:6379失败","err":"dial tcp 127.0.0.1:6379: getsockopt: connection refused","level":"ERROR","time":1457490760}
