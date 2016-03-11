@@ -88,7 +88,7 @@ func (r *FileHandle) Cut(must bool) {
 func (r *FileHandle) CheckHealth() bool {
 	_, err := file_path_check(r.Path + "/" + r.Area + "/log.json")
 	if err != nil {
-		_base_log.WriteTo(&log_err{
+		_base_log.WriteTo(&logErr{
 			Level: "ERROR",
 			Err:   err.Error(),
 			Msg: "检查日志文档" + r.Path + "/" + r.Area + ".log无法使用(" +
@@ -97,7 +97,7 @@ func (r *FileHandle) CheckHealth() bool {
 		})
 		return false
 	}
-	_base_log.WriteTo(&log_err{
+	_base_log.WriteTo(&logErr{
 		Level: "INFO",
 		Err:   "",
 		Msg: "检查日志文档" + r.Path + "/" + r.Area + ".log可以使用(" +

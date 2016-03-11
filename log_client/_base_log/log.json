@@ -2,3 +2,5 @@
 {"msg":"初始化redis服务器127.0.0.1:6379失败","err":"dial tcp 127.0.0.1:6379: getsockopt: connection refused","level":"ERROR","time":1457417580}
 {"msg":"初始化redis服务器127.0.0.1:6379失败","err":"dial tcp 127.0.0.1:6379: getsockopt: connection refused","level":"ERROR","time":1457490760}
 {"msg":"初始化redis服务器127.0.0.1:6379失败","err":"dial tcp 127.0.0.1:6379: getsockopt: connection refused","level":"ERROR","time":1457579435}
+{"msg":"初始化redis服务器127.0.0.1:6379失败","err":"dial tcp 127.0.0.1:6379: getsockopt: connection refused","level":"ERROR","time":1457678445}
+{"msg":"文件日志127.0.0.1:6379无法使用","err":"kafka: invalid configuration (You must provide at least one broker address)","level":"ERROR","time":1457678529}

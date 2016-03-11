@@ -57,3 +57,13 @@ type LogInterface interface {
 	// 此方法用于将一条将被恢复的消息重新写入日志服务
 	RecoveryTo(string)
 }
+
+// 日志基础数据接口
+type LogBase interface {
+	// 获取当前日志的等级
+	GetLevel() string
+	// 设置当前日志的等级
+	SetLevel(string)
+	// 设置这条日志的记录时间
+	SetTime(int64)
+}

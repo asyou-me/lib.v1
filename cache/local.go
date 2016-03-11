@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+//
 type LocalCacheM struct {
 	lock   *sync.RWMutex
 	caches map[string]*Cache

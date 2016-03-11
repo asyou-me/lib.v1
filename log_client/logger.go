@@ -79,7 +79,7 @@ func (l *Logger) Consumer() {
 
 		// 错误消息列表
 		case e := <-err:
-			_base_log.WriteTo(&log_err{
+			_base_log.WriteTo(&logErr{
 				Level: "WARN",
 				Msg:   e.Error(),
 				Time:  time.Now().Unix(),
@@ -114,7 +114,7 @@ func (l *Logger) Consumer() {
 					l.Transition(true)
 				}
 			}
-			
+
 		case s := <-stop:
 			if s == true {
 				break
@@ -157,7 +157,7 @@ func (l *Logger) Transition(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				_base_log.WriteTo(&log_err{
+				_base_log.WriteTo(&logErr{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "初始化redis服务器" + l.Conf[i].Addr + "失败",
@@ -175,7 +175,25 @@ func (l *Logger) Transition(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				_base_log.WriteTo(&log_err{
+				_base_log.WriteTo(&logErr{
+					Level: "ERROR",
+					Err:   err.Error(),
+					Msg:   "文件日志" + l.Conf[i].Addr + "无法使用",
+					Time:  time.Now().Unix(),
+				})
+			}
+			break
+		case "kafka":
+			var backend LogInterface
+			backend, err = NewKafkaHandle(l.Conf[i], l)
+			if err == nil {
+				l.CurrConf = l.Conf[i]
+				l.ErrNum = 0
+				l.BackEndTrash = l.BackEnd
+				l.BackEnd = backend
+				l.Run = 1
+			} else {
+				_base_log.WriteTo(&logErr{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "文件日志" + l.Conf[i].Addr + "无法使用",
@@ -191,7 +209,7 @@ func (l *Logger) Transition(spare bool) {
 			if l.CurrConf.Spare == true {
 				fmt.Println("\033[31;1m日志进入低优先模式,系统会以", ReconnectInterval,
 					"秒为周期检查高权重服务的可用性")
-				_base_log.WriteTo(&log_err{
+				_base_log.WriteTo(&logErr{
 					Level: "INFO",
 					Msg:   "高权重服务不可用,日志进入备用模式",
 					Time:  time.Now().Unix(),

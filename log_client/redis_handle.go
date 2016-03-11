@@ -36,7 +36,7 @@ type RedisHandle struct {
 func (r *RedisHandle) CheckHealth() bool {
 	_, err := r.Client.Do("PING")
 	if err != nil {
-		_base_log.WriteTo(&log_err{
+		_base_log.WriteTo(&logErr{
 			Level: "ERROR",
 			Err:   err.Error(),
 			Msg:   "检查redis服务器" + r.Client.Address + ",服务无法使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
@@ -44,7 +44,7 @@ func (r *RedisHandle) CheckHealth() bool {
 		})
 		return false
 	}
-	_base_log.WriteTo(&log_err{
+	_base_log.WriteTo(&logErr{
 		Level: "INFO",
 		Err:   "",
 		Msg:   "检查redis服务器" + r.Client.Address + ",服务可以使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
