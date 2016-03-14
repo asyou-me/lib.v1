@@ -27,7 +27,7 @@ type Logger struct {
 	PrintKey bool
 
 	// 消息管道
-	NewsChannel     chan LogBase
+	MsgChannel      chan LogBase
 	RecoveryChannel chan string
 
 	Err         chan error
@@ -45,7 +45,7 @@ func (l *Logger) Init(conf *[]LogConf) error {
 	l.BackEndTrash = nil
 
 	// 日志列表
-	l.NewsChannel = make(chan LogBase, 1000)
+	l.MsgChannel = make(chan LogBase, 1000)
 	l.StopChannel = make(chan bool)
 	l.Err = make(chan error, 100)
 	l.TransitionChannel = make(chan bool, 1)
@@ -65,7 +65,7 @@ func (l *Logger) Init(conf *[]LogConf) error {
 
 // 日志对象消费者
 func (l *Logger) Consumer() {
-	var news = l.NewsChannel
+	var news = l.MsgChannel
 	var err = l.Err
 	var stop = l.StopChannel
 	var transition = l.TransitionChannel
@@ -231,7 +231,7 @@ func (l *Logger) Debug(obj ...LogBase) {
 	if l.Level >= DebugLevel {
 		for _, v := range obj {
 			v.SetLevel("DEBUG")
-			l.NewsChannel <- v
+			l.MsgChannel <- v
 		}
 	}
 }
@@ -241,7 +241,7 @@ func (l *Logger) Info(obj ...LogBase) {
 	if l.Level >= InfoLevel {
 		for _, v := range obj {
 			v.SetLevel("INFO")
-			l.NewsChannel <- v
+			l.MsgChannel <- v
 		}
 	}
 }
@@ -251,7 +251,7 @@ func (l *Logger) Print(obj ...LogBase) {
 	if l.Level >= InfoLevel {
 		for _, v := range obj {
 			v.SetLevel("PRINT")
-			l.NewsChannel <- v
+			l.MsgChannel <- v
 		}
 	}
 }
@@ -261,7 +261,7 @@ func (l *Logger) Warn(obj ...LogBase) {
 	if l.Level >= WarnLevel {
 		for _, v := range obj {
 			v.SetLevel("WARN")
-			l.NewsChannel <- v
+			l.MsgChannel <- v
 		}
 	}
 }
@@ -271,7 +271,7 @@ func (l *Logger) Error(obj ...LogBase) {
 	if l.Level >= ErrorLevel {
 		for _, v := range obj {
 			v.SetLevel("ERROR")
-			l.NewsChannel <- v
+			l.MsgChannel <- v
 		}
 	}
 }
@@ -281,7 +281,7 @@ func (l *Logger) Fatal(obj ...LogBase) {
 	if l.Level >= FatalLevel {
 		for _, v := range obj {
 			v.SetLevel("FATAL")
-			l.NewsChannel <- v
+			l.MsgChannel <- v
 		}
 	}
 }

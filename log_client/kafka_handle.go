@@ -75,7 +75,7 @@ func (r *KafkaHandle) WriteTo(msg LogBase) {
 		r.errNum = r.errNum + 1
 		r.mu.Unlock()
 		go func() {
-			r.log.NewsChannel <- msg
+			r.log.MsgChannel <- msg
 			r.log.Err <- err
 		}()
 		return
@@ -98,7 +98,7 @@ func (r *KafkaHandle) RecoveryTo(msg string) {
 		r.errNum = r.errNum + 1
 		r.mu.Unlock()
 		go func() {
-			r.log.NewsChannel <- msg
+			r.log.RecoveryChannel <- msg
 			r.log.Err <- err
 		}()
 		return

@@ -71,7 +71,7 @@ func (r *RedisHandle) WriteTo(msg LogBase) {
 		r.errNum = r.errNum + 1
 		r.mu.Unlock()
 		go func() {
-			r.log.NewsChannel <- msg
+			r.log.MsgChannel <- msg
 			r.log.Err <- err
 		}()
 		return
