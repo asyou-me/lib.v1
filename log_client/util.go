@@ -2,12 +2,14 @@ package log_client
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
-//格式日志对象到json
+// 格式日志对象到json
 func jsonFormat(data LogBase) []byte {
 	serialized, err := json.Marshal(data)
 	if err != nil {
@@ -16,7 +18,7 @@ func jsonFormat(data LogBase) []byte {
 	return serialized
 }
 
-//按权重排序配置文件 (降序排列)
+// 按权重排序配置文件 (降序排列)
 func LogConfSort(array []LogConf) {
 	for i := 0; i < len(array); i++ {
 		for j := 0; j < len(array)-i-1; j++ {
@@ -53,4 +55,19 @@ func Exist(filename string) (os.FileInfo, error) {
 		return fileinfo, nil
 	}
 	return nil, err
+}
+
+//  切分ip和端口
+func IpPort(filename string) (string, int, error) {
+	strs := strings.Split(filename, ":")
+	if len(strs) != 2 {
+		return "", 0, errors.New("参数不符合xxx.xxx.xxx.xxx:port")
+	}
+	// 转换端口号为数字
+	port, err := strconv.Atoi(strs[1])
+	if err != nil {
+		return "", 0, err
+	}
+
+	return strs[0], port, err
 }
