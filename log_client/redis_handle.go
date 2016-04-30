@@ -58,9 +58,6 @@ func (r *RedisHandle) WriteTo(msg LogBase) {
 	NowTime := time.Now().Unix()
 	msg.SetTime(NowTime)
 
-	if r.log.PrintKey {
-		fmt.Println(msg)
-	}
 	reader := jsonFormat(msg)
 	_, err := r.Client.Do("LPUSH", r.Area, string(reader))
 	r.mu.Lock()

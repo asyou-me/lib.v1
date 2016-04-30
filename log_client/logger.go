@@ -23,9 +23,6 @@ type Logger struct {
 	//日志记录等级
 	Level Level
 
-	//日志打印等级
-	PrintKey bool
-
 	// 消息管道
 	MsgChannel      chan LogBase
 	RecoveryChannel chan string
