@@ -5,31 +5,37 @@ import (
 	"time"
 )
 
-// 创建一个终端日志处理对象
+// 创建一个文档日志处理对象
 func NewConsoleHandle(conf LogConf, log *Logger) (*ConsoleHandle, error) {
-	flog := ConsoleHandle{}
-	return &flog, nil
+	clog := ConsoleHandle{
+		log: log,
+	}
+	return &clog, nil
 }
 
-// 终端日志处理对象
+// 日志处理对象
 type ConsoleHandle struct {
+	log *Logger
 }
 
-// 文档日志对象健康检查
+// 日志对象健康检查
 func (r *ConsoleHandle) CheckHealth() bool {
 	return true
 }
 
-// 文档日志处理句柄
+// 日志处理句柄
 func (l *ConsoleHandle) WriteTo(msg LogBase) {
 	var NowTime = time.Now().Unix()
 
 	msg.SetTime(NowTime)
-	msgbyte := append(jsonFormat(msg), '\n')
+	fmt.Println(msg)
 
-	fmt.Println(string(msgbyte))
+	msg = nil
 }
 
 // 文档日志处理句柄
 func (l *ConsoleHandle) RecoveryTo(msg string) {
+
+	fmt.Println(msg)
+	msg = ""
 }
