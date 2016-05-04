@@ -23,9 +23,6 @@ type Logger struct {
 	//日志记录等级
 	Level Level
 
-	//日志打印等级
-	PrintKey bool
-
 	// 消息管道
 	MsgChannel      chan LogBase
 	RecoveryChannel chan string
@@ -201,6 +198,24 @@ func (l *Logger) Transition(spare bool) {
 				})
 			}
 			break
+		case "console":
+			var backend LogInterface
+			backend, err = NewConsoleHandle(l.Conf[i], l)
+			if err == nil {
+				l.CurrConf = l.Conf[i]
+				l.ErrNum = 0
+				l.BackEndTrash = l.BackEnd
+				l.BackEnd = backend
+				l.Run = 1
+			} else {
+				_base_log.WriteTo(&logErr{
+					Level: "ERROR",
+					Err:   err.Error(),
+					Msg:   "终端日志" + l.Conf[i].Addr + "无法使用",
+					Time:  time.Now().Unix(),
+				})
+			}
+			break
 		default:
 			continue
 		}
@@ -266,6 +281,16 @@ func (l *Logger) Warn(obj ...LogBase) {
 	}
 }
 
+//传入Warn日志
+func (l *Logger) Warning(obj ...LogBase) {
+	if l.Level >= WarnLevel {
+		for _, v := range obj {
+			v.SetLevel("WARNING")
+			l.MsgChannel <- v
+		}
+	}
+}
+
 //传入Error日志
 func (l *Logger) Error(obj ...LogBase) {
 	if l.Level >= ErrorLevel {
@@ -281,6 +306,16 @@ func (l *Logger) Fatal(obj ...LogBase) {
 	if l.Level >= FatalLevel {
 		for _, v := range obj {
 			v.SetLevel("FATAL")
+			l.MsgChannel <- v
+		}
+	}
+}
+
+//传入Fatal日志
+func (l *Logger) Panic(obj ...LogBase) {
+	if l.Level >= FatalLevel {
+		for _, v := range obj {
+			v.SetLevel("PANIC")
 			l.MsgChannel <- v
 		}
 	}

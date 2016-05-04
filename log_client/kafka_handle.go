@@ -1,7 +1,6 @@
 package log_client
 
 import (
-	"fmt"
 	"github.com/Shopify/sarama"
 	"strings"
 	"sync"
@@ -54,10 +53,6 @@ func (r *KafkaHandle) CheckHealth() bool {
 func (r *KafkaHandle) WriteTo(msg LogBase) {
 	NowTime := time.Now().Unix()
 	msg.SetTime(NowTime)
-
-	if r.log.PrintKey {
-		fmt.Println(msg)
-	}
 
 	// 格式化数据到json
 	reader := jsonFormat(msg)

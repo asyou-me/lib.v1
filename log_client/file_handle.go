@@ -120,9 +120,7 @@ func (l *FileHandle) WriteTo(msg LogBase) {
 
 	msg.SetTime(NowTime)
 	msgbyte := append(jsonFormat(msg), '\n')
-	if l.log.PrintKey {
-		fmt.Print(string(msgbyte))
-	}
+
 	reader := bytes.NewBuffer(msgbyte)
 
 	// 多线程写锁定

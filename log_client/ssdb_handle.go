@@ -72,9 +72,6 @@ func (r *SSdbHandle) WriteTo(msg LogBase) {
 	NowTime := time.Now().Unix()
 	msg.SetTime(NowTime)
 
-	if r.log.PrintKey {
-		fmt.Println(msg)
-	}
 	reader := jsonFormat(msg)
 
 	// 获取一个连接

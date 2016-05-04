@@ -1,7 +1,5 @@
 package log_client
 
-import ()
-
 // 定义日志等级常量
 const (
 	FatalLevel = iota
