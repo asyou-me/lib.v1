@@ -29,7 +29,7 @@ func log_test() {
 	for {
 		for i := 0; i < 3000; i++ {
 			go func() {
-				logger.Debug(&logErr{
+				logger.Debug(&Loggerr{
 					Err: "",
 					Msg: "检查redis服务器服务无法使用()",
 				})

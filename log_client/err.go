@@ -1,20 +1,20 @@
 package log_client
 
-type logErr struct {
+type Loggerr struct {
 	Msg   string `json:"msg"`
 	Err   string `json:"err"`
 	Level string `json:"level"`
 	Time  int64  `json:"time"`
 }
 
-func (l *logErr) GetLevel() string {
+func (l *Loggerr) GetLevel() string {
 	return ""
 }
 
-func (l *logErr) SetLevel(level string) {
+func (l *Loggerr) SetLevel(level string) {
 	l.Level = level
 }
 
-func (l *logErr) SetTime(t int64) {
+func (l *Loggerr) SetTime(t int64) {
 	l.Time = t
 }

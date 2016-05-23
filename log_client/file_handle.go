@@ -50,10 +50,10 @@ func (r *FileHandle) Init() error {
 		os.Mkdir(r.Path+"/"+r.Area, 0755)
 	}
 
-	out_file, logErr := os.OpenFile(r.Path+"/"+r.Area+"/log.json", os.O_CREATE|
+	out_file, Loggerr := os.OpenFile(r.Path+"/"+r.Area+"/log.json", os.O_CREATE|
 		os.O_RDWR|os.O_APPEND, 0666)
-	if logErr != nil {
-		return logErr
+	if Loggerr != nil {
+		return Loggerr
 	}
 	r.Out = out_file
 	return nil
@@ -72,9 +72,9 @@ func (r *FileHandle) Cut(must bool) {
 		os.Rename(r.Path+"/"+r.Area+"/log.json", r.Path+"/"+r.Area+"/"+
 			mtime.Format(FileTimeFormat)+".json")
 		if must {
-			out_file, logErr := os.OpenFile(r.Path+"/"+r.Area+"/log.json", os.O_CREATE|
+			out_file, Loggerr := os.OpenFile(r.Path+"/"+r.Area+"/log.json", os.O_CREATE|
 				os.O_RDWR|os.O_APPEND, 0666)
-			if logErr == nil {
+			if Loggerr == nil {
 				r.Out = out_file
 			}
 		}
@@ -88,7 +88,7 @@ func (r *FileHandle) Cut(must bool) {
 func (r *FileHandle) CheckHealth() bool {
 	_, err := file_path_check(r.Path + "/" + r.Area + "/log.json")
 	if err != nil {
-		_base_log.WriteTo(&logErr{
+		_base_log.WriteTo(&Loggerr{
 			Level: "ERROR",
 			Err:   err.Error(),
 			Msg: "检查日志文档" + r.Path + "/" + r.Area + ".log无法使用(" +
@@ -97,7 +97,7 @@ func (r *FileHandle) CheckHealth() bool {
 		})
 		return false
 	}
-	_base_log.WriteTo(&logErr{
+	_base_log.WriteTo(&Loggerr{
 		Level: "INFO",
 		Err:   "",
 		Msg: "检查日志文档" + r.Path + "/" + r.Area + ".log可以使用(" +

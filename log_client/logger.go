@@ -76,7 +76,7 @@ func (l *Logger) Consumer() {
 
 		// 错误消息列表
 		case e := <-err:
-			_base_log.WriteTo(&logErr{
+			_base_log.WriteTo(&Loggerr{
 				Level: "WARN",
 				Msg:   e.Error(),
 				Time:  time.Now().Unix(),
@@ -154,7 +154,7 @@ func (l *Logger) Transition(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				_base_log.WriteTo(&logErr{
+				_base_log.WriteTo(&Loggerr{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "初始化redis服务器" + l.Conf[i].Addr + "失败",
@@ -172,7 +172,7 @@ func (l *Logger) Transition(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				_base_log.WriteTo(&logErr{
+				_base_log.WriteTo(&Loggerr{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "文件日志" + l.Conf[i].Addr + "无法使用",
@@ -190,7 +190,7 @@ func (l *Logger) Transition(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				_base_log.WriteTo(&logErr{
+				_base_log.WriteTo(&Loggerr{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "文件日志" + l.Conf[i].Addr + "无法使用",
@@ -208,7 +208,7 @@ func (l *Logger) Transition(spare bool) {
 				l.BackEnd = backend
 				l.Run = 1
 			} else {
-				_base_log.WriteTo(&logErr{
+				_base_log.WriteTo(&Loggerr{
 					Level: "ERROR",
 					Err:   err.Error(),
 					Msg:   "终端日志" + l.Conf[i].Addr + "无法使用",
@@ -224,7 +224,7 @@ func (l *Logger) Transition(spare bool) {
 			if l.CurrConf.Spare == true {
 				fmt.Println("\033[31;1m日志进入低优先模式,系统会以", ReconnectInterval,
 					"秒为周期检查高权重服务的可用性")
-				_base_log.WriteTo(&logErr{
+				_base_log.WriteTo(&Loggerr{
 					Level: "INFO",
 					Msg:   "高权重服务不可用,日志进入备用模式",
 					Time:  time.Now().Unix(),
