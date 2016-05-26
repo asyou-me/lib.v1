@@ -1,10 +1,12 @@
 package log_client
 
 import (
-	"github.com/Shopify/sarama"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/Shopify/sarama"
+	"github.com/asyoume/lib/pulic_type"
 )
 
 // 创建kafka处理对象
@@ -50,7 +52,7 @@ func (r *KafkaHandle) CheckHealth() bool {
 }
 
 // kafka处理句柄
-func (r *KafkaHandle) WriteTo(msg LogBase) {
+func (r *KafkaHandle) WriteTo(msg pulic_type.LogBase) {
 	NowTime := time.Now().Unix()
 	msg.SetTime(NowTime)
 

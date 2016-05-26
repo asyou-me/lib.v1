@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
+
+	"github.com/asyoume/lib/pulic_type"
 )
 
 // 日志对象
@@ -242,7 +244,7 @@ func (l *Logger) Transition(spare bool) {
 }
 
 //传入debug日志
-func (l *Logger) Debug(obj ...LogBase) {
+func (l *Logger) Debug(obj ...pulic_type.LogBase) {
 	if l.Level >= DebugLevel {
 		for _, v := range obj {
 			v.SetLevel("DEBUG")
@@ -252,7 +254,7 @@ func (l *Logger) Debug(obj ...LogBase) {
 }
 
 //传入info日志
-func (l *Logger) Info(obj ...LogBase) {
+func (l *Logger) Info(obj ...pulic_type.LogBase) {
 	if l.Level >= InfoLevel {
 		for _, v := range obj {
 			v.SetLevel("INFO")
@@ -262,7 +264,7 @@ func (l *Logger) Info(obj ...LogBase) {
 }
 
 //传入Print日志
-func (l *Logger) Print(obj ...LogBase) {
+func (l *Logger) Print(obj ...pulic_type.LogBase) {
 	if l.Level >= InfoLevel {
 		for _, v := range obj {
 			v.SetLevel("PRINT")
@@ -272,7 +274,7 @@ func (l *Logger) Print(obj ...LogBase) {
 }
 
 //传入Warn日志
-func (l *Logger) Warn(obj ...LogBase) {
+func (l *Logger) Warn(obj ...pulic_type.LogBase) {
 	if l.Level >= WarnLevel {
 		for _, v := range obj {
 			v.SetLevel("WARN")
@@ -282,7 +284,7 @@ func (l *Logger) Warn(obj ...LogBase) {
 }
 
 //传入Warn日志
-func (l *Logger) Warning(obj ...LogBase) {
+func (l *Logger) Warning(obj ...pulic_type.LogBase) {
 	if l.Level >= WarnLevel {
 		for _, v := range obj {
 			v.SetLevel("WARNING")
@@ -292,7 +294,7 @@ func (l *Logger) Warning(obj ...LogBase) {
 }
 
 //传入Error日志
-func (l *Logger) Error(obj ...LogBase) {
+func (l *Logger) Error(obj ...pulic_type.LogBase) {
 	if l.Level >= ErrorLevel {
 		for _, v := range obj {
 			v.SetLevel("ERROR")
@@ -302,7 +304,7 @@ func (l *Logger) Error(obj ...LogBase) {
 }
 
 //传入Fatal日志
-func (l *Logger) Fatal(obj ...LogBase) {
+func (l *Logger) Fatal(obj ...pulic_type.LogBase) {
 	if l.Level >= FatalLevel {
 		for _, v := range obj {
 			v.SetLevel("FATAL")
@@ -312,7 +314,7 @@ func (l *Logger) Fatal(obj ...LogBase) {
 }
 
 //传入Fatal日志
-func (l *Logger) Panic(obj ...LogBase) {
+func (l *Logger) Panic(obj ...pulic_type.LogBase) {
 	if l.Level >= FatalLevel {
 		for _, v := range obj {
 			v.SetLevel("PANIC")

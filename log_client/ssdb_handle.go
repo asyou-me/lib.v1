@@ -2,9 +2,11 @@ package log_client
 
 import (
 	"fmt"
-	"github.com/seefan/gossdb"
 	"sync"
 	"time"
+
+	"github.com/asyoume/lib/pulic_type"
+	"github.com/seefan/gossdb"
 )
 
 // 创建SSdb处理对象
@@ -68,7 +70,7 @@ func (r *SSdbHandle) CheckHealth() bool {
 }
 
 // SSdb处理句柄
-func (r *SSdbHandle) WriteTo(msg LogBase) {
+func (r *SSdbHandle) WriteTo(msg pulic_type.LogBase) {
 	NowTime := time.Now().Unix()
 	msg.SetTime(NowTime)
 

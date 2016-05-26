@@ -3,6 +3,8 @@ package log_client
 import (
 	"fmt"
 	"time"
+
+	"github.com/asyoume/lib/pulic_type"
 )
 
 // 创建一个文档日志处理对象
@@ -24,7 +26,7 @@ func (r *ConsoleHandle) CheckHealth() bool {
 }
 
 // 日志处理句柄
-func (l *ConsoleHandle) WriteTo(msg LogBase) {
+func (l *ConsoleHandle) WriteTo(msg pulic_type.LogBase) {
 	var NowTime = time.Now().Unix()
 
 	msg.SetTime(NowTime)

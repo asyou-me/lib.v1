@@ -8,8 +8,8 @@ func Resiger(code int, err *ErrStruct) {
 	defaultCodes.Resiger(code, err)
 }
 
-func New(code int, local string, values ...string) *ErrStruct {
-	return defaultCodes.New(code, local, values...)
+func New(code int, values ...string) *ErrStruct {
+	return defaultCodes.New(code, "", values...)
 }
 
 func NewWithPath(code int, values ...string) *ErrStruct {

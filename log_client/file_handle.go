@@ -7,6 +7,8 @@ import (
 	"os"
 	"sync"
 	"time"
+
+	"github.com/asyoume/lib/pulic_type"
 )
 
 // 创建一个文档日志处理对象
@@ -108,7 +110,7 @@ func (r *FileHandle) CheckHealth() bool {
 }
 
 // 文档日志处理句柄
-func (l *FileHandle) WriteTo(msg LogBase) {
+func (l *FileHandle) WriteTo(msg pulic_type.LogBase) {
 	var NowTime = time.Now().Unix()
 	// 自动分片日志
 	if NowTime-l.NowDayTime > 86400 {

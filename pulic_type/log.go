@@ -30,26 +30,42 @@ type DefalutLogger struct {
 }
 
 func (this *DefalutLogger) Debug(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }
 func (this *DefalutLogger) Info(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }
 func (this *DefalutLogger) Print(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }
 func (this *DefalutLogger) Warn(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }
 func (this *DefalutLogger) Warning(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }
 func (this *DefalutLogger) Error(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }
 func (this *DefalutLogger) Fatal(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }
 func (this *DefalutLogger) Panic(values ...LogBase) {
-	fmt.Println(values)
+	for _, v := range values {
+		fmt.Println(v)
+	}
 }

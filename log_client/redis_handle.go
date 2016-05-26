@@ -2,9 +2,12 @@ package log_client
 
 import (
 	"fmt"
-	"github.com/asyoume/lib/redis"
+
 	"sync"
 	"time"
+
+	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib/redis"
 )
 
 // 创建redis处理对象
@@ -54,7 +57,7 @@ func (r *RedisHandle) CheckHealth() bool {
 }
 
 // redis处理句柄
-func (r *RedisHandle) WriteTo(msg LogBase) {
+func (r *RedisHandle) WriteTo(msg pulic_type.LogBase) {
 	NowTime := time.Now().Unix()
 	msg.SetTime(NowTime)
 
