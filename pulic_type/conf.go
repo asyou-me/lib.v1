@@ -4,7 +4,7 @@ type (
 	// 公用配置文件
 	ConfType struct {
 		Name     string                  `json:"name"`
-		MicroSer map[string]MicroSerType `json:"micro_ser"`
+		MicroSer map[string]MicroSerType `json:"micro_ser" yaml:"micro_ser"`
 		// 配置文件的属性
 		Attr    map[string]interface{} `json:"attr"`
 		Version string                 `json:"version"`

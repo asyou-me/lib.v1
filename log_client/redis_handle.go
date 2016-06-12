@@ -7,17 +7,19 @@ import (
 	"time"
 
 	"github.com/asyoume/lib/pulic_type"
-	"github.com/asyoume/lib/redis"
+	"github.com/garyburd/redigo/redis"
 )
 
 // 创建redis处理对象
 func NewRedisHandle(conf LogConf, log *Logger) (*RedisHandle, error) {
-	c, err := redis.NewPool(conf.Addr, 20)
-	if err != nil {
-		return nil, err
+	pool := &redis.Pool{
+		MaxIdle: 20,
+		Dial: func() (redis.Conn, error) {
+			return redis.DialTimeout("tcp", conf.Addr, time.Second, time.Second, time.Second)
+		},
 	}
 	flog := RedisHandle{
-		Client: c,
+		Client: pool,
 		Area:   conf.Area,
 		log:    log,
 	}
@@ -37,12 +39,16 @@ type RedisHandle struct {
 
 // redis服务健康检查
 func (r *RedisHandle) CheckHealth() bool {
-	_, err := r.Client.Do("PING")
+	client := r.Client.Get()
+	defer func() {
+		client.Close()
+	}()
+	_, err := client.Do("PING")
 	if err != nil {
 		_base_log.WriteTo(&Loggerr{
 			Level: "ERROR",
 			Err:   err.Error(),
-			Msg:   "检查redis服务器" + r.Client.Address + ",服务无法使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
+			Msg:   "检查redis服务器无法使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
 			Time:  time.Now().Unix(),
 		})
 		return false
@@ -50,7 +56,7 @@ func (r *RedisHandle) CheckHealth() bool {
 	_base_log.WriteTo(&Loggerr{
 		Level: "INFO",
 		Err:   "",
-		Msg:   "检查redis服务器" + r.Client.Address + ",服务可以使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
+		Msg:   "检查redis服务器务可以使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
 		Time:  time.Now().Unix(),
 	})
 	return true
@@ -62,7 +68,11 @@ func (r *RedisHandle) WriteTo(msg pulic_type.LogBase) {
 	msg.SetTime(NowTime)
 
 	reader := jsonFormat(msg)
-	_, err := r.Client.Do("LPUSH", r.Area, string(reader))
+	client := r.Client.Get()
+	defer func() {
+		client.Close()
+	}()
+	_, err := client.Do("LPUSH", r.Area, string(reader))
 	r.mu.Lock()
 	r.num = r.num + 1
 	r.mu.Unlock()
@@ -82,7 +92,11 @@ func (r *RedisHandle) WriteTo(msg pulic_type.LogBase) {
 
 // redis处理句柄
 func (r *RedisHandle) RecoveryTo(msg string) {
-	_, err := r.Client.Do("LPUSH", r.Area, msg)
+	client := r.Client.Get()
+	defer func() {
+		client.Close()
+	}()
+	_, err := client.Do("LPUSH", r.Area, msg)
 	r.mu.Lock()
 	r.num = r.num + 1
 	r.mu.Unlock()
