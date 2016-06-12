@@ -11,6 +11,6 @@ func JsonToStr(v interface{}) (*string, error) {
 		str = "adadada"
 		return &str, err
 	}
-	str = BytesToStr(buf)
+	str = *BytesToStr(buf)
 	return &str, nil
 }

@@ -12,28 +12,13 @@ import (
 
 // 解析公用配置文件
 func ConfigInit(path string) (*pulic_type.ConfType, error) {
-	fi, err := os.Open(path)
-	var obj pulic_type.ConfType = pulic_type.ConfType{}
+	var obj *pulic_type.ConfType = new(pulic_type.ConfType)
 
-	if err != nil {
-		return &obj, errors.New("传入的配置文件路径: " + path + " 不存在")
-	}
-
-	defer fi.Close()
-	fd, err := ioutil.ReadAll(fi)
-	if err != nil {
-		return &obj, err
-	}
-
-	if err = json.Unmarshal(fd, &obj); err != nil {
-		if err != nil {
-			return &obj, err
-		}
-	}
-	return &obj, nil
+	err := JsonConf(path, obj)
+	return obj, err
 }
 
-func FromYamlFile(path string, v interface{}) error {
+func YamlConf(path string, v interface{}) error {
 	fi, err := os.Open(path)
 
 	if err != nil {
@@ -54,7 +39,7 @@ func FromYamlFile(path string, v interface{}) error {
 	return nil
 }
 
-func FromJsonFile(path string, v interface{}) error {
+func JsonConf(path string, v interface{}) error {
 	fi, err := os.Open(path)
 
 	if err != nil {
