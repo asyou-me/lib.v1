@@ -90,6 +90,8 @@ func NotZero(key string, value interface{}) error {
 		isPass = false
 		break
 	}
-	fmt.Println(isPass)
+	if !isPass {
+		return errors.New(errors.NULL, key)
+	}
 	return nil
 }

@@ -1,9 +1,6 @@
 package validate
 
-import (
-//"fmt"
-//"github.com/asaskevich/govalidator"
-)
+import ()
 
 func Check(item []*Item) error {
 	var err error
