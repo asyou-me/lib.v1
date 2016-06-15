@@ -24,7 +24,7 @@ var _base_log *FileHandle
 
 func init() {
 	// 默认自动初始化到当前目录
-	SetBaseLog(LogConf{"./", "_base_log", "",
+	SetBaseLog(LogConf{"./_out", "_base_log", "",
 		"", "file", true, 1})
 }
 
