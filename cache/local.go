@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-//
+// 内存储存
 type LocalCacheM struct {
 	lock   *sync.RWMutex
-	caches map[string]*Cache
+	caches map[string]*LocalCache
 }
 
-type Cache struct {
+type LocalCache struct {
 	Value interface{}
 	Time  int64
 }
@@ -20,20 +20,20 @@ func NewLocalCacheM(size int) *LocalCacheM {
 	return &LocalCacheM{new(sync.RWMutex), make(map[string]*Cache, size)}
 }
 
-func (this *LocalCacheM) Set(key string, v *Cache) {
+func (this *LocalCacheM) Set(key string, v *LocalCache) {
 	this.lock.Lock()
 	this.caches[key] = v
 	this.lock.Unlock()
 }
 
-func (this *LocalCacheM) Get(key string) *Cache {
+func (this *LocalCacheM) Get(key string) *LocalCache {
 	this.lock.Lock()
 	v := this.caches[key]
 	this.lock.Unlock()
 	return v
 }
 
-func (this *LocalCacheM) Delete(key string) (v *Cache) {
+func (this *LocalCacheM) Delete(key string) (v *LocalCache) {
 	this.lock.Lock()
 	v = this.caches[key]
 	delete(this.caches, key)
