@@ -55,7 +55,7 @@ func (t *StringNull) Status() int8 {
 }
 
 // sql 数据库插入时转换值
-func (t *StringNull) Value() (driver.Value, error) {
+func (t StringNull) Value() (driver.Value, error) {
 	return driver.Value(t.value), nil
 }
 
@@ -66,6 +66,7 @@ type StampTime struct {
 	Data     int64
 }
 
+// json 序列化时调用
 func (t *StampTime) MarshalJSON() ([]byte, error) {
 	if t.JosnType == 0 {
 		return []byte(fmt.Sprint(t.Data)), nil
@@ -74,6 +75,7 @@ func (t *StampTime) MarshalJSON() ([]byte, error) {
 	}
 }
 
+// 插入 sql 数据库时调用
 func (t *StampTime) Value() (driver.Value, error) {
 	return driver.Value(time.Unix(t.Data, 0).Format("2006-01-02 15:04:05")), nil
 }

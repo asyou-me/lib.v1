@@ -18,6 +18,7 @@ func ConfigInit(path string) (*pulic_type.ConfType, error) {
 	return obj, err
 }
 
+// yaml 格式配置文件解析
 func YamlConf(path string, v interface{}) error {
 	fi, err := os.Open(path)
 
@@ -39,6 +40,7 @@ func YamlConf(path string, v interface{}) error {
 	return nil
 }
 
+// json 格式配置文件解析
 func JsonConf(path string, v interface{}) error {
 	fi, err := os.Open(path)
 

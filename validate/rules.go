@@ -6,11 +6,12 @@ import (
 	"github.com/asyoume/lib/errors"
 )
 
-var RoleMap map[string]RoleFunc = map[string]RoleFunc{
+var RuleMap map[string]RuleFunc = map[string]RuleFunc{
 	"require":  Require,
 	"not_zero": NotZero,
 }
 
+// 是否必须
 func Require(key string, value interface{}) error {
 	var isPass = true
 	if value == nil {
@@ -53,6 +54,7 @@ func Require(key string, value interface{}) error {
 	return nil
 }
 
+// 不能为0
 func NotZero(key string, value interface{}) error {
 	var isPass bool
 	switch v := value.(type) {

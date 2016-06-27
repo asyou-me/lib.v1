@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// 错误类型
 type ErrStruct struct {
 	// status code
 	Code int
@@ -17,26 +18,36 @@ type ErrStruct struct {
 	ValueLen int
 	// 文字错误类型
 	Type string
+	// Log 信息
+	Local *string
+	// Log 信息
+	LogMsg *string
 }
 
+// 默认输出语言
 var defaultLang = "zh"
 
+// 通过语言类型获取消息
 func (this *ErrStruct) Message(lang string) string {
 	return FormatValue(this, lang, this.Data)
 }
 
+// 获取错误信息
 func (this *ErrStruct) Error() string {
 	return `{"message":"` + this.Message(defaultLang) +
 		`","type":"` + this.Type +
 		`","code":"` + fmt.Sprint(this.Code) + `"}`
 }
 
+// 错误类型集合
 type ErrCodes map[int]*ErrStruct
 
+// 注册一个错误类型
 func (this *ErrCodes) Resiger(code int, err *ErrStruct) {
 	(*this)[code] = err
 }
 
+// 创建一个错误类型
 func (this *ErrCodes) New(code int, local string, values ...string) *ErrStruct {
 	Err, ok := (*this)[code]
 	if !ok {
@@ -44,6 +55,9 @@ func (this *ErrCodes) New(code int, local string, values ...string) *ErrStruct {
 		Err.Data = []string{fmt.Sprint(code)}
 	}
 	Err.Data = values
+	if local != "" {
+		*Err.Local = local
+	}
 	return Err
 }
 
