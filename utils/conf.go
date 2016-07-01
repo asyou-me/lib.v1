@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"errors"
-	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib.v1/pulic_type"
 	"io/ioutil"
 	"os"
 

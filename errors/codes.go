@@ -49,16 +49,21 @@ func (this *ErrCodes) Resiger(code int, err *ErrStruct) {
 
 // 创建一个错误类型
 func (this *ErrCodes) New(code int, local string, values ...string) *ErrStruct {
-	Err, ok := (*this)[code]
+	// Err 为指针 不能直接使用需要复制部分  多线程才能安全
+	var Err ErrStruct
+	ErrP, ok := (*this)[code]
 	if !ok {
-		Err = NotFoundErr
+		Err = *NotFoundErr
 		Err.Data = []string{fmt.Sprint(code)}
+	} else {
+		Err = *ErrP
 	}
+
 	Err.Data = values
 	if local != "" {
 		*Err.Local = local
 	}
-	return Err
+	return &Err
 }
 
 var NotFoundErr = &ErrStruct{

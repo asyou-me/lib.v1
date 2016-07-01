@@ -14,3 +14,8 @@ func JsonToStr(v interface{}) (*string, error) {
 	str = *BytesToStr(buf)
 	return &str, nil
 }
+
+// json 序列化为字符串
+func StrToJson(data *string, v interface{}) error {
+	return json.Unmarshal(StrToBytes(data), v)
+}

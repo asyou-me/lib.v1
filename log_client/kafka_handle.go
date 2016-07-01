@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/Shopify/sarama"
-	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib.v1/pulic_type"
 )
 
 // 创建kafka处理对象
-func NewKafkaHandle(lconf LogConf, log *Logger) (*KafkaHandle, error) {
+func NewKafkaHandle(lconf pulic_type.LogConf, log *Logger) (*KafkaHandle, error) {
 	config := sarama.NewConfig()
 	config.Producer.RequiredAcks = sarama.WaitForAll
 	config.Producer.Partitioner = sarama.NewRandomPartitioner

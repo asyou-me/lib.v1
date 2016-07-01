@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib.v1/pulic_type"
 )
 
 // 创建一个文档日志处理对象
-func NewConsoleHandle(conf LogConf, log *Logger) (*ConsoleHandle, error) {
+func NewConsoleHandle(conf pulic_type.LogConf, log *Logger) (*ConsoleHandle, error) {
 	clog := ConsoleHandle{
 		log: log,
 	}
@@ -37,7 +37,6 @@ func (l *ConsoleHandle) WriteTo(msg pulic_type.LogBase) {
 
 // 文档日志处理句柄
 func (l *ConsoleHandle) RecoveryTo(msg string) {
-
 	fmt.Println(msg)
 	msg = ""
 }

@@ -5,12 +5,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib.v1/pulic_type"
 	"github.com/seefan/gossdb"
 )
 
 // 创建SSdb处理对象
-func NewSSdbHandle(conf LogConf, log *Logger) (*SSdbHandle, error) {
+func NewSSdbHandle(conf pulic_type.LogConf, log *Logger) (*SSdbHandle, error) {
 	ip, port, err := IpPort(conf.Addr)
 	if err != nil {
 		return nil, err

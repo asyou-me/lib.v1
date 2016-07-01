@@ -7,10 +7,12 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/asyoume/lib.v1/pulic_type"
 )
 
 // 格式日志对象到json
-func jsonFormat(data LogBase) []byte {
+func jsonFormat(data pulic_type.LogBase) []byte {
 	serialized, err := json.Marshal(data)
 	if err != nil {
 		return nil
@@ -19,7 +21,7 @@ func jsonFormat(data LogBase) []byte {
 }
 
 // 按权重排序配置文件 (降序排列)
-func LogConfSort(array []LogConf) {
+func LogConfSort(array []pulic_type.LogConf) {
 	for i := 0; i < len(array); i++ {
 		for j := 0; j < len(array)-i-1; j++ {
 			if array[j].Weight < array[j+1].Weight {

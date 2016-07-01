@@ -6,12 +6,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib.v1/pulic_type"
 	"github.com/garyburd/redigo/redis"
 )
 
 // 创建redis处理对象
-func NewRedisHandle(conf LogConf, log *Logger) (*RedisHandle, error) {
+func NewRedisHandle(conf pulic_type.LogConf, log *Logger) (*RedisHandle, error) {
 	pool := &redis.Pool{
 		MaxIdle: 20,
 		Dial: func() (redis.Conn, error) {

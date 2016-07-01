@@ -3,6 +3,8 @@ package log_client
 import (
 	"fmt"
 	"os"
+
+	"github.com/asyoume/lib.v1/pulic_type"
 )
 
 var (
@@ -24,11 +26,11 @@ var _base_log *FileHandle
 
 func init() {
 	// 默认自动初始化到当前目录
-	SetBaseLog(LogConf{"./_out", "_base_log", "",
+	SetBaseLog(pulic_type.LogConf{"./_out", "_base_log", "",
 		"", "file", true, 1})
 }
 
-func SetBaseLog(conf LogConf) {
+func SetBaseLog(conf pulic_type.LogConf) {
 	var err error
 	_base_log, err = NewFileHandle(conf, &Logger{})
 	if err != nil {
@@ -39,7 +41,7 @@ func SetBaseLog(conf LogConf) {
 }
 
 // 创建日志对象
-func New(conf *[]LogConf) (*Logger, error) {
+func New(conf *[]pulic_type.LogConf) (*Logger, error) {
 	l := &Logger{}
 	err := l.Init(conf)
 	if err != nil {

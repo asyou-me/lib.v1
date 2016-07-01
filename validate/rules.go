@@ -3,7 +3,7 @@ package validate
 import (
 	"fmt"
 
-	"github.com/asyoume/lib/errors"
+	"github.com/asyoume/lib.v1/errors"
 )
 
 var RuleMap map[string]RuleFunc = map[string]RuleFunc{
@@ -15,7 +15,7 @@ var RuleMap map[string]RuleFunc = map[string]RuleFunc{
 func Require(key string, value interface{}) error {
 	var isPass = true
 	if value == nil {
-		return errors.New(errors.NULL, key)
+		return errors.New(errors.NULL, key+"")
 	}
 
 	switch v := value.(type) {
@@ -49,7 +49,7 @@ func Require(key string, value interface{}) error {
 		break
 	}
 	if !isPass {
-		return errors.New(errors.NULL, key)
+		return errors.New(errors.NULL, key+" 为必填参数")
 	}
 	return nil
 }
@@ -93,7 +93,7 @@ func NotZero(key string, value interface{}) error {
 		break
 	}
 	if !isPass {
-		return errors.New(errors.NULL, key)
+		return errors.New(errors.NULL, key+" 必须为数字,且不能为0")
 	}
 	return nil
 }

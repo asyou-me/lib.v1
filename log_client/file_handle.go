@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib.v1/pulic_type"
 )
 
 // 创建一个文档日志处理对象
-func NewFileHandle(conf LogConf, log *Logger) (*FileHandle, error) {
+func NewFileHandle(conf pulic_type.LogConf, log *Logger) (*FileHandle, error) {
 	flog := FileHandle{
 		Path: conf.Addr,
 		Area: conf.Area,

@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/asyoume/lib/pulic_type"
+	"github.com/asyoume/lib.v1/pulic_type"
 )
 
 // 日志对象
 type Logger struct {
 	// 配置文件
-	Conf     []LogConf
-	CurrConf LogConf
+	Conf     []pulic_type.LogConf
+	CurrConf pulic_type.LogConf
 	// 运行状态
 	Run int64
 	// 后端对象
@@ -26,7 +26,7 @@ type Logger struct {
 	Level Level
 
 	// 消息管道
-	MsgChannel      chan LogBase
+	MsgChannel      chan pulic_type.LogBase
 	RecoveryChannel chan string
 
 	Err         chan error
@@ -35,7 +35,7 @@ type Logger struct {
 }
 
 // 日志对象初始化流程
-func (l *Logger) Init(conf *[]LogConf) error {
+func (l *Logger) Init(conf *[]pulic_type.LogConf) error {
 
 	// 据权重调整配置文件顺序
 	LogConfSort(*conf)
@@ -44,7 +44,7 @@ func (l *Logger) Init(conf *[]LogConf) error {
 	l.BackEndTrash = nil
 
 	// 日志列表
-	l.MsgChannel = make(chan LogBase, 1000)
+	l.MsgChannel = make(chan pulic_type.LogBase, 1000)
 	l.StopChannel = make(chan bool)
 	l.Err = make(chan error, 100)
 	l.TransitionChannel = make(chan bool, 1)
