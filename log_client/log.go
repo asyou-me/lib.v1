@@ -22,20 +22,20 @@ C P U:i5 6600
 使用redis后端  6w/s写入速度  内存占用170M  cpu 28%
 */
 
-var _base_log *FileHandle
+var _base_log *ConsoleHandle
 
 func init() {
 	// 默认自动初始化到当前目录
-	SetBaseLog(pulic_type.LogConf{"./_out", "_base_log", "",
-		"", "file", true, 1})
+	SetBaseLog(pulic_type.LogConf{"", "", "",
+		"", "console", true, 1})
 }
 
 func SetBaseLog(conf pulic_type.LogConf) {
 	var err error
-	_base_log, err = NewFileHandle(conf, &Logger{})
+	_base_log, err = NewConsoleHandle(conf, &Logger{})
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("\033[31;1mPanic：文件日志无法使用")
+		fmt.Println("\033[31;1mPanic：基础日志无法使用")
 		os.Exit(2)
 	}
 }
