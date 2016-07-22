@@ -27,9 +27,7 @@ func DoGet(urlStr string, params *url.Values) ([]byte, *http.Response, error) {
 
 func DoPostJson(urlStr string, v interface{}) ([]byte, *http.Response, error) {
 	var postReader io.Reader = nil
-	//if params != nil {
-	//postReader = strings.NewReader(params.Encode())
-	//}
+
 	resp, err := DefaultClient.Post(urlStr, "application/x-www-form-urlencoded", postReader)
 	if err != nil {
 		return nil, nil, err
@@ -44,9 +42,7 @@ func DoPostJson(urlStr string, v interface{}) ([]byte, *http.Response, error) {
 
 func DoPostXml(urlStr string, v interface{}) ([]byte, *http.Response, error) {
 	var postReader io.Reader = nil
-	//if params != nil {
-	//postReader = strings.NewReader(params.Encode())
-	//}
+
 	data, err := xml.Marshal(v)
 	if err != nil {
 		return nil, nil, err
