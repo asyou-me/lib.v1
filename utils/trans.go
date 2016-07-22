@@ -30,3 +30,25 @@ func StringToInt(value string, def int) int {
 	}
 	return i
 }
+
+func GetString(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	data, ok := value.(string)
+	if ok {
+		return data
+	}
+	return ""
+}
+
+func GetInt64(value interface{}) int64 {
+	if value == nil {
+		return 0
+	}
+	data, ok := value.(int64)
+	if ok {
+		return data
+	}
+	return 0
+}
