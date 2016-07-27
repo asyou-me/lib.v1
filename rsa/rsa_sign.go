@@ -5,18 +5,23 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/pem"
 	"errors"
 )
 
 func Sign(src []byte, privateKey string, hash crypto.Hash) ([]byte, error) {
-
 	block, _ := pem.Decode([]byte(privateKey))
+	if block == nil {
+		return nil, errors.New("Failed to parse RSA private key ")
+	}
 	key, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
-		return nil, errors.New("Failed to parse RSA private key: %s\n", err)
+		return nil, errors.New("Failed to parse RSA private key: " + err.Error())
 	}
-	rsaPrivate, _ := key.(*rsa.PrivateKey)
-
+	rsaPrivate, ok := key.(*rsa.PrivateKey)
+	if !ok {
+		return nil, errors.New("Failed to parse RSA private key ")
+	}
 	h := hash.New()
 	h.Write(src)
 	hashed := h.Sum(nil)
@@ -24,11 +29,13 @@ func Sign(src []byte, privateKey string, hash crypto.Hash) ([]byte, error) {
 }
 
 func Verify(src []byte, publicKey string, sign []byte, hash crypto.Hash) error {
-
 	block, _ := pem.Decode([]byte(publicKey))
+	if block == nil {
+		return errors.New("Failed to parse RSA public key ")
+	}
 	key, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
-		return errors.New("Failed to parse RSA public key: %s\n", err)
+		return errors.New("Failed to parse RSA public key: " + err.Error())
 	}
 	rsaPub, _ := key.(*rsa.PublicKey)
 
