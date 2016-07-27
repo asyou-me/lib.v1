@@ -12,7 +12,7 @@ import (
 func Sign(src []byte, privateKey string, hash crypto.Hash) ([]byte, error) {
 	block, _ := pem.Decode([]byte(privateKey))
 	if block == nil {
-		return nil, errors.New("Failed to parse RSA private key ")
+		return nil, errors.New("Failed to parse RSA private key")
 	}
 	key, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
@@ -20,7 +20,7 @@ func Sign(src []byte, privateKey string, hash crypto.Hash) ([]byte, error) {
 	}
 	rsaPrivate, ok := key.(*rsa.PrivateKey)
 	if !ok {
-		return nil, errors.New("Failed to parse RSA private key ")
+		return nil, errors.New("Failed to parse RSA private key")
 	}
 	h := hash.New()
 	h.Write(src)

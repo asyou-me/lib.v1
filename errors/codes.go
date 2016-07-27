@@ -19,9 +19,9 @@ type ErrStruct struct {
 	// 文字错误类型
 	Type string
 	// Log 信息
-	Local *string
+	Local string
 	// Log 信息
-	LogMsg *string
+	LogMsg string
 }
 
 // 默认输出语言
@@ -50,7 +50,7 @@ func (this *ErrCodes) Resiger(code int, err *ErrStruct) {
 // 创建一个错误类型
 func (this *ErrCodes) New(code int, local string, values ...string) *ErrStruct {
 	// Err 为指针 不能直接使用需要复制部分  多线程才能安全
-	var Err ErrStruct
+	var Err ErrStruct = ErrStruct{}
 	ErrP, ok := (*this)[code]
 	if !ok {
 		Err = *NotFoundErr
@@ -61,7 +61,7 @@ func (this *ErrCodes) New(code int, local string, values ...string) *ErrStruct {
 
 	Err.Data = values
 	if local != "" {
-		*Err.Local = local
+		Err.Local = local
 	}
 	return &Err
 }
