@@ -1,4 +1,4 @@
-package timewheel
+package timer
 
 import (
 	"container/list"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type TimeWheelCallback func(interface{})
+type TimeWheelCallback func([]interface{})
 
 type TimeWheel struct {
 	//

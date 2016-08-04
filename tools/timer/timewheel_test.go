@@ -1,4 +1,4 @@
-package timewheel
+package timer
 
 import (
 	"fmt"
@@ -8,13 +8,13 @@ import (
 
 var stop chan struct{}
 
-func callback(datas interface{}) {
+func callback(datas []interface{}) {
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
 	fmt.Println(datas)
 }
 
 func TestTimeWheel(t *testing.T) {
-	timeWheel := NewTimeWhell(1, 310, callback)
+	timeWheel := NewTimeWhell(1, 3, callback)
 	timeWheel.Start()
 	timeWheel.Add(11, "11秒测试1")
 	timeWheel.Add(11, "11秒测试2")
