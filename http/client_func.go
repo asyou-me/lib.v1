@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"encoding/json"
 	"encoding/xml"
 	"io"
 	"io/ioutil"
@@ -28,7 +29,13 @@ func DoGet(urlStr string, params *url.Values) ([]byte, *http.Response, error) {
 func DoPostJson(urlStr string, v interface{}) ([]byte, *http.Response, error) {
 	var postReader io.Reader = nil
 
-	resp, err := DefaultClient.Post(urlStr, "application/x-www-form-urlencoded", postReader)
+	data, err := json.Marshal(v)
+	if err != nil {
+		return nil, nil, err
+	}
+	postReader = bytes.NewReader(data)
+
+	resp, err := DefaultClient.Post(urlStr, "application/json;charset=utf-8", postReader)
 	if err != nil {
 		return nil, nil, err
 	}
