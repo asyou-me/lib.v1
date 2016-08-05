@@ -1,6 +1,7 @@
 package pulic_type
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -49,41 +50,49 @@ type DefalutLogger struct {
 
 func (this *DefalutLogger) Debug(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
 }
 func (this *DefalutLogger) Info(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
 }
 func (this *DefalutLogger) Print(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
 }
 func (this *DefalutLogger) Warn(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
 }
 func (this *DefalutLogger) Warning(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
 }
 func (this *DefalutLogger) Error(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
 }
 func (this *DefalutLogger) Fatal(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
 }
 func (this *DefalutLogger) Panic(values ...LogBase) {
 	for _, v := range values {
-		fmt.Println(v)
+		fmtJSON(v)
 	}
+}
+
+func fmtJSON(v LogBase) {
+	data, err := json.Marshal(v)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(data))
 }
