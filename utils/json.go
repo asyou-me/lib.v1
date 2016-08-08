@@ -8,10 +8,11 @@ func JsonToStr(v interface{}) (*string, error) {
 	if err != nil {
 		return nil, err
 	}
-	return BytesToStr(buf), nil
+	str := string(buf)
+	return &str, nil
 }
 
 // json 序列化为字符串
 func StrToJson(data *string, v interface{}) error {
-	return json.Unmarshal(StrToBytes(data), v)
+	return json.Unmarshal([]byte(*data), v)
 }
