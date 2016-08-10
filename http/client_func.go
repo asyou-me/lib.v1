@@ -26,6 +26,19 @@ func DoGet(urlStr string, params *url.Values) ([]byte, *http.Response, error) {
 	return body, resp, err
 }
 
+func DoPostForm(urlStr string, params *url.Values) ([]byte, *http.Response, error) {
+	resp, err := DefaultClient.PostForm(urlStr, *params)
+	if err != nil {
+		return nil, resp, err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, resp, err
+	}
+	return body, resp, err
+}
+
 func DoPostJson(urlStr string, v interface{}) ([]byte, *http.Response, error) {
 	var postReader io.Reader = nil
 
