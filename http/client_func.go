@@ -75,7 +75,7 @@ func Do(method, urlStr string, v interface{}) ([]byte, *http.Response, error) {
 
 	resp, err := DefaultClient.Do(req)
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
