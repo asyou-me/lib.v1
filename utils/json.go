@@ -15,7 +15,7 @@ func JsonToStr(v interface{}) (*string, error) {
 	return &str, nil
 }
 
-// json 序列化为字符串
+// json字符串 反序列化为结构
 func StrToJson(data *string, v interface{}) error {
-	return json.Unmarshal(StrToBytes(data), v)
+	return json.Unmarshal([]byte(*data), v)
 }
