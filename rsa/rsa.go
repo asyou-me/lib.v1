@@ -7,7 +7,7 @@ import (
 	"errors"
 )
 
-// 私钥加密数据
+// RsaEncrypt 私钥加密数据
 func RsaEncrypt(data, key []byte) ([]byte, error) {
 	privateKeyBlock, _ := pem.Decode(key)
 	if privateKeyBlock == nil {
@@ -20,7 +20,7 @@ func RsaEncrypt(data, key []byte) ([]byte, error) {
 	return priKeyByte(priv.(*rsa.PrivateKey), data, true)
 }
 
-// 公钥加密数据
+// RsaPubEncrypt 公钥加密数据
 func RsaPubEncrypt(data, key []byte) ([]byte, error) {
 	publicKeyBlock, _ := pem.Decode(key)
 	if publicKeyBlock == nil {
@@ -33,7 +33,7 @@ func RsaPubEncrypt(data, key []byte) ([]byte, error) {
 	return pubKeyByte(publ.(*rsa.PublicKey), data, true)
 }
 
-// 私钥解密数据
+// RsaDecrypt 私钥解密数据
 func RsaDecrypt(data, key []byte) ([]byte, error) {
 	privateKeyBlock, _ := pem.Decode(key)
 	if privateKeyBlock == nil {
@@ -46,7 +46,7 @@ func RsaDecrypt(data, key []byte) ([]byte, error) {
 	return priKeyByte(priv.(*rsa.PrivateKey), data, false)
 }
 
-// 公钥解密数据
+// RsaPubDecrypt 公钥解密数据
 func RsaPubDecrypt(data, key []byte) ([]byte, error) {
 	publicKeyBlock, _ := pem.Decode(key)
 	if publicKeyBlock == nil {
