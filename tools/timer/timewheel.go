@@ -6,8 +6,10 @@ import (
 	"time"
 )
 
+// TimeWheelCallback 时间轮回调函数类型
 type TimeWheelCallback func([]interface{})
 
+// TimeWheel 时间轮主体
 type TimeWheel struct {
 	//
 	interval time.Duration
@@ -25,11 +27,13 @@ type TimeWheel struct {
 	quitChannel chan interface{}
 }
 
+// BucketItem 时间轮触发点
 type BucketItem struct {
 	interval time.Duration
 	value    interface{}
 }
 
+// NewTimeWhell 新建一个时间轮
 func NewTimeWhell(interval time.Duration, bucketCount int, callback TimeWheelCallback) *TimeWheel {
 	timeWheel := &TimeWheel{
 		buckets:        ring.New(bucketCount),
@@ -48,11 +52,13 @@ func NewTimeWhell(interval time.Duration, bucketCount int, callback TimeWheelCal
 	return timeWheel
 }
 
+// Start 运行一个时间轮
 func (timeWheel *TimeWheel) Start() {
 	timeWheel.ticker = time.NewTicker(timeWheel.interval * time.Second)
 	go timeWheel.run()
 }
 
+// Add 向时间轮中添加一个触发点
 func (timeWheel *TimeWheel) Add(interval time.Duration, item ...interface{}) {
 	timeWheel.requestChannel <- &BucketItem{
 		interval: interval,
@@ -60,6 +66,7 @@ func (timeWheel *TimeWheel) Add(interval time.Duration, item ...interface{}) {
 	}
 }
 
+// Stop 停止一个时间轮
 func (timeWheel *TimeWheel) Stop() {
 	close(timeWheel.quitChannel)
 }

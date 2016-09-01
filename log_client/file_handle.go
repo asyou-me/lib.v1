@@ -49,7 +49,7 @@ func (r *FileHandle) Init() error {
 
 	_, err := file_path_check(r.Path + "/" + r.Area)
 	if err != nil {
-		os.Mkdir(r.Path+"/"+r.Area, 0755)
+		os.MkdirAll(r.Path+"/"+r.Area, 0755)
 	}
 
 	out_file, Loggerr := os.OpenFile(r.Path+"/"+r.Area+"/log.json", os.O_CREATE|
