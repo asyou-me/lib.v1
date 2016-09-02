@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/asyoume/lib.v1/pulic_type"
+	"github.com/asyou-me/lib.v1/pulic_type"
 )
 
 // 格式日志对象到json

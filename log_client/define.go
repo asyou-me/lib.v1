@@ -1,7 +1,7 @@
 package log_client
 
 import (
-	"github.com/asyoume/lib.v1/pulic_type"
+	"github.com/asyou-me/lib.v1/pulic_type"
 )
 
 // 定义日志等级常量

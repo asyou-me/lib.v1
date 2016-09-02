@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asyoume/lib.v1/pulic_type"
+	"github.com/asyou-me/lib.v1/pulic_type"
 	"github.com/garyburd/redigo/redis"
 )
 

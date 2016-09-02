@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asyoume/lib.v1/pulic_type"
+	"github.com/asyou-me/lib.v1/pulic_type"
 )
 
 // 创建一个文档日志处理对象

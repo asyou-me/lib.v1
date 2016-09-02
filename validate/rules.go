@@ -3,7 +3,7 @@ package validate
 import (
 	"fmt"
 
-	"github.com/asyoume/lib.v1/errors"
+	"github.com/asyou-me/lib.v1/errors"
 )
 
 var RuleMap map[string]RuleFunc = map[string]RuleFunc{

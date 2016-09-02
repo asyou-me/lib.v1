@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/asyoume/lib.v1/pulic_type"
+	"github.com/asyou-me/lib.v1/pulic_type"
 )
 
 // 解析公用配置文件

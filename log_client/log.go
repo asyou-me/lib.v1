@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/asyoume/lib.v1/pulic_type"
+	"github.com/asyou-me/lib.v1/pulic_type"
 )
 
 var (
