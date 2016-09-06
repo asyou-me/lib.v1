@@ -52,7 +52,7 @@ func (r *SSdbHandle) CheckHealth() bool {
 	defer c.Close()
 	_, err = c.Do("PING")
 	if err != nil {
-		_base_log.WriteTo(&Loggerr{
+		_baseLog.WriteTo(&Loggerr{
 			Level: "ERROR",
 			Err:   err.Error(),
 			Msg:   "检查SSdb服务器" + r.log.CurrConf.Addr + ",服务无法使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
@@ -60,7 +60,7 @@ func (r *SSdbHandle) CheckHealth() bool {
 		})
 		return false
 	}
-	_base_log.WriteTo(&Loggerr{
+	_baseLog.WriteTo(&Loggerr{
 		Level: "INFO",
 		Err:   "",
 		Msg:   "检查SSdb服务器" + r.log.CurrConf.Addr + ",服务可以使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",

@@ -45,7 +45,7 @@ func (r *RedisHandle) CheckHealth() bool {
 	}()
 	_, err := client.Do("PING")
 	if err != nil {
-		_base_log.WriteTo(&Loggerr{
+		_baseLog.WriteTo(&Loggerr{
 			Level: "ERROR",
 			Err:   err.Error(),
 			Msg:   "检查redis服务器无法使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",
@@ -53,7 +53,7 @@ func (r *RedisHandle) CheckHealth() bool {
 		})
 		return false
 	}
-	_base_log.WriteTo(&Loggerr{
+	_baseLog.WriteTo(&Loggerr{
 		Level: "INFO",
 		Err:   "",
 		Msg:   "检查redis服务器务可以使用(" + fmt.Sprintf("%d/%d", r.errNum, r.num) + ")",

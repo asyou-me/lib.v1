@@ -3,6 +3,7 @@ package log_client
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/asyou-me/lib.v1/pulic_type"
 )
@@ -22,7 +23,7 @@ C P U:i5 6600
 使用redis后端  6w/s写入速度  内存占用170M  cpu 28%
 */
 
-var _base_log *ConsoleHandle
+var _baseLog *ConsoleHandle
 
 func init() {
 	// 默认自动初始化到当前目录
@@ -32,10 +33,10 @@ func init() {
 
 func SetBaseLog(conf pulic_type.LogConf) {
 	var err error
-	_base_log, err = NewConsoleHandle(conf, &Logger{})
+	_baseLog, err = NewConsoleHandle(conf, &Logger{})
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("\033[31;1mPanic：基础日志无法使用")
+		fmt.Println("{time:\"" + fmt.Sprint(time.Now().Unix()) + "\",msg:\"基础日志无法使用\"}")
 		os.Exit(2)
 	}
 }
