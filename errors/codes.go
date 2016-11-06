@@ -33,8 +33,8 @@ type LogStruct struct {
 // 默认输出语言
 var defaultLang = "zh"
 
-// SetMessage 设定消息
-func (e *ErrStruct) SetMessage(msg string) {
+// LogMessage 设定消息
+func (e *ErrStruct) LogMessage(msg string) {
 	if e.Log == nil {
 		e.Log = &LogStruct{}
 	}
