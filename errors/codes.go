@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// 错误类型
+// ErrStruct 错误类型
 type ErrStruct struct {
 	// status code
 	Code int
@@ -18,40 +18,54 @@ type ErrStruct struct {
 	ValueLen int
 	// 文字错误类型
 	Type string
+
 	// Log 信息
-	Local string
-	// Log 信息
+	Log *LogStruct
+}
+
+// LogStruct 日志类型
+type LogStruct struct {
+	Local  string
 	LogMsg string
+	Line   int
 }
 
 // 默认输出语言
 var defaultLang = "zh"
 
-// 通过语言类型获取消息
-func (this *ErrStruct) Message(lang string) string {
-	return FormatValue(this, lang, this.Data)
+// SetMessage 设定消息
+func (e *ErrStruct) SetMessage(msg string) {
+	if e.Log == nil {
+		e.Log = &LogStruct{}
+	}
+	e.Log.LogMsg = msg
+}
+
+// Message 通过语言类型获取消息
+func (e *ErrStruct) Message(lang string) string {
+	return FormatValue(e, lang, e.Data)
 }
 
 // 获取错误信息
-func (this *ErrStruct) Error() string {
-	return `{"message":"` + this.Message(defaultLang) +
-		`","type":"` + this.Type +
-		`","code":"` + fmt.Sprint(this.Code) + `"}`
+func (e *ErrStruct) Error() string {
+	return `{"message":"` + e.Message(defaultLang) +
+		`","type":"` + e.Type +
+		`","code":"` + fmt.Sprint(e.Code) + `"}`
 }
 
-// 错误类型集合
+// ErrCodes 错误类型集合
 type ErrCodes map[int]*ErrStruct
 
-// 注册一个错误类型
-func (this *ErrCodes) Resiger(code int, err *ErrStruct) {
-	(*this)[code] = err
+// Resiger 注册一个错误类型
+func (e *ErrCodes) Resiger(code int, err *ErrStruct) {
+	(*e)[code] = err
 }
 
-// 创建一个错误类型
-func (this *ErrCodes) New(code int, local string, values ...string) *ErrStruct {
+// New 创建一个错误类型
+func (e *ErrCodes) New(code int, values ...string) *ErrStruct {
 	// Err 为指针 不能直接使用需要复制部分  多线程才能安全
-	var Err ErrStruct = ErrStruct{}
-	ErrP, ok := (*this)[code]
+	var Err = ErrStruct{}
+	ErrP, ok := (*e)[code]
 	if !ok {
 		Err = *NotFoundErr
 		Err.Data = []string{fmt.Sprint(code)}
@@ -60,9 +74,7 @@ func (this *ErrCodes) New(code int, local string, values ...string) *ErrStruct {
 	}
 
 	Err.Data = values
-	if local != "" {
-		Err.Local = local
-	}
+
 	return &Err
 }
 
