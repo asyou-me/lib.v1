@@ -244,6 +244,13 @@ func (l *Logger) Transition(spare bool) {
 }
 
 //传入debug日志
+func (l *Logger) Log(obj ...pulic_type.LogBase) {
+	for _, v := range obj {
+		l.MsgChannel <- v
+	}
+}
+
+//传入debug日志
 func (l *Logger) Debug(obj ...pulic_type.LogBase) {
 	if l.Level >= DebugLevel {
 		for _, v := range obj {

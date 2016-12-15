@@ -33,6 +33,7 @@ type Logger interface {
 	Error(...LogBase)
 	Fatal(...LogBase)
 	Panic(...LogBase)
+	Log(...LogBase)
 }
 
 // 日志基础数据接口
@@ -48,21 +49,30 @@ type LogBase interface {
 type DefalutLogger struct {
 }
 
+func (this *DefalutLogger) Log(values ...LogBase) {
+	for _, v := range values {
+		fmtJSON(v)
+	}
+}
+
 func (this *DefalutLogger) Debug(values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)
 	}
 }
+
 func (this *DefalutLogger) Info(values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)
 	}
 }
+
 func (this *DefalutLogger) Print(values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)
 	}
 }
+
 func (this *DefalutLogger) Warn(values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)
@@ -73,16 +83,19 @@ func (this *DefalutLogger) Warning(values ...LogBase) {
 		fmtJSON(v)
 	}
 }
+
 func (this *DefalutLogger) Error(values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)
 	}
 }
+
 func (this *DefalutLogger) Fatal(values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)
 	}
 }
+
 func (this *DefalutLogger) Panic(values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)

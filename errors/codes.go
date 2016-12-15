@@ -14,6 +14,10 @@ type ErrStruct struct {
 	Format map[string][]string
 	// 错误信息
 	Data []string
+	// 验参信息模板
+	ErrCode int
+	// 验参信息模板
+	ErrData *map[string]string
 	// 错误长度
 	ValueLen int
 	// 文字错误类型
