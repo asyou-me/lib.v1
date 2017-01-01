@@ -244,8 +244,9 @@ func (l *Logger) Transition(spare bool) {
 }
 
 //传入debug日志
-func (l *Logger) Log(obj ...pulic_type.LogBase) {
+func (l *Logger) Log(level string, obj ...pulic_type.LogBase) {
 	for _, v := range obj {
+		v.SetLevel(level)
 		l.MsgChannel <- v
 	}
 }

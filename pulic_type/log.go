@@ -33,7 +33,7 @@ type Logger interface {
 	Error(...LogBase)
 	Fatal(...LogBase)
 	Panic(...LogBase)
-	Log(...LogBase)
+	Log(string, ...LogBase)
 }
 
 // 日志基础数据接口
@@ -49,7 +49,7 @@ type LogBase interface {
 type DefalutLogger struct {
 }
 
-func (this *DefalutLogger) Log(values ...LogBase) {
+func (this *DefalutLogger) Log(level string, values ...LogBase) {
 	for _, v := range values {
 		fmtJSON(v)
 	}
