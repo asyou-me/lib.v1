@@ -40,8 +40,8 @@ func NewTimeWhell(interval time.Duration, bucketCount int, callback TimeWheelCal
 		interval:       interval,
 		currentPos:     0,
 		callback:       callback,
-		requestChannel: make(chan interface{}),
-		quitChannel:    make(chan interface{}),
+		requestChannel: make(chan interface{}, 100),
+		quitChannel:    make(chan interface{}, 1),
 	}
 
 	for i := 1; i <= timeWheel.buckets.Len(); i++ {
