@@ -60,9 +60,11 @@ func (timeWheel *TimeWheel) Start() {
 
 // Add 向时间轮中添加一个触发点
 func (timeWheel *TimeWheel) Add(interval time.Duration, item ...interface{}) {
-	timeWheel.requestChannel <- &BucketItem{
-		interval: interval,
-		value:    item,
+	for _, v := range item {
+		timeWheel.requestChannel <- &BucketItem{
+			interval: interval,
+			value:    v,
+		}
 	}
 }
 
@@ -84,11 +86,6 @@ func (timeWheel *TimeWheel) run() {
 				var n *list.Element
 				for v := buckets.Front(); v != nil; v = n {
 					if bucketItem := v.Value.(*BucketItem); nil != bucketItem {
-
-						//insertBucket := timeWheel.buckets.Move(int(bucketItem.interval.Nanoseconds()) / int(timeWheel.interval))
-						//itemList, _ := insertBucket.Value.(*list.List)
-						//itemList.PushBack(bucketItem)
-
 						userDatas = append(userDatas, bucketItem.value)
 						n = v.Next()
 						buckets.Remove(v)
